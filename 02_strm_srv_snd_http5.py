@@ -22,6 +22,10 @@ INDEX_PAGE_VLC = \
 <!DOCTYPE html>
 <html><body>
 <h1> The view from our window. </h1>
+<h4>
+NOTE: To be able to see the stream you need VLC be installed at your PC: http://www.videolan.org/vlc/index.html
+If your browser doesn't show the stream immediately (like Google Chrome) probably approval is needed for VLC plug-in to be activated.
+</h4>
 <OBJECT classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921"
  codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
  width="640" height="480" id="vlc" events="True">
@@ -108,8 +112,8 @@ class StrmServerHTTP :
 
     def Stop(self):
         self._stop_server=True
-        self._http_srv.RequestHandlerClass.stop_streaming = True
-        self._main_thread.join()
+        self._http_srv.socket.close()
+        
 
 srv = StrmServerHTTP()
 srv.Run()
