@@ -23,7 +23,7 @@ INDEX_PAGE_VLC = \
 <html><body>
 <h1> The view from our window. </h1>
 <h4>
-NOTE: To be able to see the stream you need VLC be installed at your PC: http://www.videolan.org/vlc/index.html
+NOTE: To be able to see the stream you need VLC being installed at your PC: 'http://www.videolan.org/vlc/index.html'.
 If your browser doesn't show the stream immediately (like Google Chrome) probably approval is needed for VLC plug-in to be activated.
 </h4>
 <OBJECT classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921"
