@@ -54,7 +54,7 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         if not globals().has_key("the_stream_exists"):
             globals()["the_stream_exists"] = True
-            os.system("raspivid -o - -t 9999999 -n -w 640 -h 480 -fps 20 -vf  |cvlc -vvv stream:///dev/stdin --sout '#standard{access=http,mux=ts,dst=:8080}' :demux=h264 &")
+            os.system("raspivid -o - -t 9999999 -n -w 640 -h 480 -fps 20 -vf -hf  |cvlc -vvv stream:///dev/stdin --sout '#standard{access=http,mux=ts,dst=:8080}' :demux=h264 &")
             time.sleep(2)
             print("!!! streaming started")
 
