@@ -23,8 +23,10 @@ INDEX_PAGE_VLC = \
 <html><body>
 <h1> The view from our window. </h1>
 <h4>
-NOTE: To be able to see the stream you need VLC being installed at your PC: 'http://www.videolan.org/vlc/index.html'.
-If your browser doesn't show the stream immediately (like Google Chrome) probably approval is needed for VLC plug-in to be activated.
+WINDOWS NOTE: To be able to see the stream you need VLC being installed at your PC: 'http://www.videolan.org/vlc/index.html'.
+If your browser doesn't show the stream immediately probably approval is needed for VLC plug-in to be activated (try a right click at the plug-in area).
+ANDROID NOTE: You can actually see the stream at port 8080 at your Android devices if you install 'VLC for Android
+beta' and use 'Open Network Stream' icom (antenna) at the top-right corner of the application. Give it: http://46.117.246.251:8080. Try few times if it hungs.
 </h4>
 <OBJECT classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921"
  codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
