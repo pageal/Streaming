@@ -16,6 +16,10 @@ import picamera
 import io
 import mimetypes
 
+import wiringpi
+
+
+
 
 INDEX_PAGE_VLC = \
 """
@@ -27,21 +31,39 @@ WINDOWS NOTE: To be able to see the stream you need VLC being installed at your 
 If your browser doesn't show the stream immediately probably approval is needed for VLC plug-in to be activated (try a right click at the plug-in area).
 </h4>
 <h4>
-ANDROID NOTE: You can actually see the stream at port 8080 at your Android devices if you install 'VLC for Android
-beta' and use 'Open Network Stream' icom (antenna) at the top-right corner of the application. Give it: http://46.117.246.251:8080. Try few times if it hungs.
+ANDROID NOTE: You can actually see the stream at port 8100 at your Android devices if you install 'VLC for Android
+beta' and use 'Open Network Stream' icom (antenna) at the top-right corner of the application. Give it: http://pagealh.asuscomm.com:8100. Try few times if it hungs.
+</h4>
+<embed type="application/x-vlc-plugin" pluginspage="http://www.videolan.org" autoplay="yes" src="http://pagealh.asuscomm.com:8100" loop="no" width="640" height="480" target="http://pagealh.asuscomm.com:8100/" ></embed>
+</html></body>
+"""
+
+
+INDEX_PAGE_VLC_OLD = \
+"""
+<!DOCTYPE html>
+<html><body>
+<h1> The view from our window. </h1>
+<h4>
+WINDOWS NOTE: To be able to see the stream you need VLC being installed at your PC: 'http://www.videolan.org/vlc/index.html'.
+If your browser doesn't show the stream immediately probably approval is needed for VLC plug-in to be activated (try a right click at the plug-in area).
+</h4>
+<h4>
+80ANDROID NOTE: You can actually see the stream at port 8100 at your Android devices if you install 'VLC for Android
+beta' and use 'Open Network Stream' icom (antenna) at the top-right corner of the application. Give it: http://pagealh.asuscomm.com:8100. Try few times if it hungs.
 </h4>
 <OBJECT classid="clsid:9BE31822-FDAD-461B-AD51-BE1D1C159921"
  codebase="http://downloads.videolan.org/pub/videolan/vlc/latest/win32/axvlc.cab"
  width="640" height="480" id="vlc" events="True">
- <param name="Src" value="http://46.117.246.251:8080/" />
+ <param name="Src" value="http://pagealh.asuscomm.com:8100/" />
  <param name="ShowDisplay" value="True" />
  <param name="AutoLoop" value="False" />
  <param name="AutoPlay" value="True" />
- <embed id="vlcEmb" type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2" autoplay="yes" loop="no" width="640" height="480"
- target="http://46.117.246.251:8080/" ></embed>
 </OBJECT>
 </html></body>
 """
+# <embed id="vlcEmb" type="application/x-google-vlc-plugin" version="VideoLAN.VLCPlugin.2"
+#autoplay="yes" loop="no" width="640" height="480"
 
 class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     _preview = False
@@ -58,7 +80,7 @@ class HTTPHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         if not globals().has_key("the_stream_exists"):
             globals()["the_stream_exists"] = True
-            os.system("raspivid -o - -t 0 -n -w 640 -h 480 -fps 20 -vf -hf  |cvlc -vvv stream:///dev/stdin --sout '#standard{access=http,mux=ts,dst=:8080}' :demux=h264 &")
+            os.system("raspivid -o - -t 0 -n -w 640 -h 480 -fps 20 -vf -hf  |cvlc -vvv stream:///dev/stdin --sout '#standard{access=http,mux=ts,dst=:8100}' :demux=h264 &")
             time.sleep(2)
             print("!!! streaming started")
 
@@ -99,10 +121,10 @@ class StrmServerHTTP :
 
     def _HTTPThread(self):
         IP = self.GetLocalIP()
-        self._http_srv = BaseHTTPServer.HTTPServer((IP, 8081),HTTPHandler)
+        self._http_srv = BaseHTTPServer.HTTPServer((IP, 8101),HTTPHandler)
         self._http_srv.rbufsize = -1
         self._http_srv.wbufsize = 100000000
-        print("http server started at " + IP + ":8081")
+        print("http server started at " + IP + ":8101")
         while (self._stop_server == False):
             try:
                 self._http_srv.handle_request()
@@ -110,7 +132,21 @@ class StrmServerHTTP :
                 pass
         print("http server finished")
 
+    def SwitchIRLeds(self, direction='on'):
+        GPIO5=24
+        os.system("gpio export %s out"%GPIO5)
+        io = wiringpi.GPIO(wiringpi.GPIO.WPI_MODE_SYS)  
+        io.pinMode(GPIO5,io.OUTPUT)
+        wiringpi.pinMode(GPIO5,io.OUTPUT)
+        if(direction=='on'):
+            io.digitalWrite(GPIO5,io.HIGH)  # Turn on the IR lights
+            print("IR light switched On")
+        else:
+            io.digitalWrite(GPIO5,io.LOW)  # Turn on the IR lights
+            print("IR light switched Off")
+
     def Run(self):
+        #self.SwitchIRLeds()
         self._main_thread = threading.Thread(target=self._HTTPThread)
         self._main_thread.start()
 
