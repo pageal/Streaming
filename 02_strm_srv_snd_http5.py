@@ -18,16 +18,13 @@ import mimetypes
 
 import wiringpi
 
-
-
-
 INDEX_PAGE_VLC = \
 """
 <!DOCTYPE html>
 <html><body>
 <h1> The view from our window. </h1>
 <h4>
-WINDOWS NOTE: To be able to see the stream you need VLC being installed at your PC: 'http://www.videolan.org/vlc/index.html'.
+WINDOWS NOTE(Mozilla FireFox only): To be able to see the stream you need VLC being installed at your PC: 'http://www.videolan.org/vlc/index.html'.
 If your browser doesn't show the stream immediately probably approval is needed for VLC plug-in to be activated (try a right click at the plug-in area).
 </h4>
 <h4>
